@@ -22,7 +22,7 @@ function App() {
       <Header viewSelector={setView} />
       
       {/* <Main hidden={view !== 'home'} />   */}
-      <Goal hidden={view !== 'home'}/>
+      <Goal hidden={view !== 'home'} viewSelector={setView}/>
       <Model hidden={view !== 'home'}/>
       <Dataset hidden={view !== 'home'}/>
       <MapBoxWrapper hidden={view !== 'map'}/>

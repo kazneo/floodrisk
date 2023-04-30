@@ -3,11 +3,11 @@ import React, { useCallback } from 'react';
 export default function Header({ viewSelector }) {
     const selectHomeView = useCallback(() => {
         viewSelector('home');
-      });
-    
-      const selectMapView = useCallback(() => {
+    });
+
+    const selectMapView = useCallback(() => {
         viewSelector('map');
-      });
+    });
     return(
         <header>
             <h1>Medical Infrastructure Flood Risk</h1>

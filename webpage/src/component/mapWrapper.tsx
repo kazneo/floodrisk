@@ -19,7 +19,7 @@ export const MapBoxWrapper = function ( { hidden } ) {
     map.current?.resize();
   }, []);
   return (
-    <div className='map-container' hidden={hidden}>
+    <div className='map-container'  hidden={hidden}>
       <div ref={mapContainer} className='map' />
     </div>
   );
