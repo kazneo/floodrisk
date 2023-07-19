@@ -19,11 +19,12 @@ export const getMap = function (ref: React.RefObject<HTMLDivElement>) {
     });
 
     // Add the onResize event listener
-    map.on('resize', function() {
-      if (map) {
-        map.resize();
-      }
-    });
+    // map.on('resize', function() {
+      // if (map) {
+      //   map.resize();
+      // }
+    // });
+    map.resize()
 
     import('../assets/gz_2010_us_040_00_5m.json').then((USState: any ) => {
       map?.addSource('us-states', {

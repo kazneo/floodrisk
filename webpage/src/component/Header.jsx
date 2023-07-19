@@ -10,7 +10,7 @@ export default function Header({ viewSelector }) {
     });
     return(
         <header>
-            <h1>Medical Infrastructure Flood Risk</h1>
+            <h1 onClick={selectHomeView}>Medical Infrastructure Flood Risk</h1>
             <nav>
                 <ul>
                     <li><a href="#" onClick={selectHomeView}>Home</a></li>
