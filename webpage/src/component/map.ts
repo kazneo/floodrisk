@@ -62,7 +62,7 @@ export const getMap = function (ref: React.RefObject<HTMLDivElement>) {
             ['linear'],
             ['get', 'risk_analysis'],
             0, '#00FF00',
-            21.39780032311679, '#FFFF00',
+            21.39780032311679, '#FFAA00',
             60.204575017875776, '#FF0000'
           ],
           'circle-radius': 3,
