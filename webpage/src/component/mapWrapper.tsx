@@ -1,13 +1,14 @@
 import mapboxgl from 'mapbox-gl';
 import React, { useEffect, useRef } from 'react';
 import { getMap } from './map';
+import Sidebar from './sideBar';
 
-// interface MapBoxWrapperProps {
-//   hidden: boolean;
-// }
+interface MapBoxWrapperProps {
+  hidden: boolean;
+}
 
-export const MapBoxWrapper = function ( { hidden } ) {
-  const mapContainer = useRef<HTMLDivElement>(null);
+export const MapBoxWrapper: React.FC<MapBoxWrapperProps> = ({ hidden }) => {
+  const mapContainer = useRef<HTMLDivElement | null>(null);
   const map = useRef<mapboxgl.Map | null>(null);
 
   useEffect(() => {
@@ -17,9 +18,11 @@ export const MapBoxWrapper = function ( { hidden } ) {
 
   useEffect(() => {
     map.current?.resize();
-  }, []);
+  }, [hidden]);
+
   return (
-    <div className='map-container'  hidden={hidden}>
+    <div className='map-container' style={{ display: hidden ? 'none' : 'block' }}>
+      <Sidebar />
       <div ref={mapContainer} className='map' />
     </div>
   );
