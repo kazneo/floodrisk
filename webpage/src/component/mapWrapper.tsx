@@ -1,7 +1,6 @@
-import mapboxgl from 'mapbox-gl';
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { getMap } from './map';
-import Sidebar from './sideBar';
+import Sidebar from './Sidebar';
 
 interface MapBoxWrapperProps {
   hidden: boolean;
@@ -10,10 +9,11 @@ interface MapBoxWrapperProps {
 export const MapBoxWrapper: React.FC<MapBoxWrapperProps> = ({ hidden }) => {
   const mapContainer = useRef<HTMLDivElement | null>(null);
   const map = useRef<mapboxgl.Map | null>(null);
+  const [selectedLocation, setSelectedLocation] = useState<any>(null);
 
   useEffect(() => {
     if (map.current) return;
-    map.current = getMap(mapContainer);
+    map.current = getMap(mapContainer, setSelectedLocation);
   }, []);
 
   useEffect(() => {
@@ -22,7 +22,7 @@ export const MapBoxWrapper: React.FC<MapBoxWrapperProps> = ({ hidden }) => {
 
   return (
     <div className='map-container' style={{ display: hidden ? 'none' : 'block' }}>
-      <Sidebar />
+      <Sidebar selectedLocation={selectedLocation} />
       <div ref={mapContainer} className='map' />
     </div>
   );
