@@ -1,10 +1,41 @@
-import React from 'react'
+import React from 'react';
+import axios from 'axios';
 import mapboxgl from 'mapbox-gl';
 
 mapboxgl.accessToken = 'pk.eyJ1Ijoia2F6bmVvIiwiYSI6ImNsZ2Q0NWYyZDA5dzUzbHBqbnU2cjZlNGMifQ.5NJfdTyPHDpp5WwL1DeHmw';
 
 const center: [number, number] = [-91.318359, 30.690782];
 const zoom = 4.5;
+
+async function getData(lat: string, lon: string, startDate: string, endDate: string) {
+  try {
+      const url = 'https://power.larc.nasa.gov/api/temporal/daily/point?parameters=PRECTOT&community=RE&longitude='+lat+'&latitude='+lon+'&start={'+ startDate +'}&end='+ endDate + '&format=JSON'
+      const response = await axios.get(url);
+      console.log(response)
+  } catch (error) {
+      console.error('Error fetching data:', error);
+  }
+}
+function toYYYYMMDD (dateString: string): string {
+  const date = new Date(dateString);
+  const year = date.getFullYear().toString();
+  const month = (date.getMonth() + 1).toString().padStart(2, '0');
+  const day = date.getDate().toString().padStart(2, '0');
+
+  return `${year}${month}${day}`;
+}
+
+function getDate30DaysAgoFromDateString(dateString: string): string {
+  const currentDate = new Date(dateString);
+  const thirtyDaysAgo = new Date(currentDate.getTime() - 30 * 24 * 60 * 60 * 1000);
+  return toYYYYMMDD(thirtyDaysAgo.toLocaleDateString());
+}
+
+let date = new Date().toLocaleDateString();
+
+const date30 = getDate30DaysAgoFromDateString(date);
+console.log(date30)
+date = toYYYYMMDD(date)
 
 export const getMap = function (
   ref: React.RefObject<HTMLDivElement>,
