@@ -16,26 +16,20 @@ async function getData(lat: string, lon: string, startDate: string, endDate: str
       console.error('Error fetching data:', error);
   }
 }
-function toYYYYMMDD (dateString: string): string {
-  const date = new Date(dateString);
-  const year = date.getFullYear().toString();
-  const month = (date.getMonth() + 1).toString().padStart(2, '0');
-  const day = date.getDate().toString().padStart(2, '0');
+const currentDateObj = new Date();
+const endDateObj = new Date(currentDateObj.getTime() - 2 * 24 * 60 * 60 * 1000); // Current date - 2 days
+const startDateObj = new Date(endDateObj.getTime() - 30 * 24 * 60 * 60 * 1000); // End date - 30 days
 
+const formatDate = (dateObj) => {
+  const year = dateObj.getFullYear();
+  const month = (dateObj.getMonth() + 1).toString().padStart(2, '0'); // Adding 1 to get the correct month (as months start from 0)
+  const day = dateObj.getDate().toString().padStart(2, '0');
   return `${year}${month}${day}`;
-}
+};
 
-function getDate30DaysAgoFromDateString(dateString: string): string {
-  const currentDate = new Date(dateString);
-  const thirtyDaysAgo = new Date(currentDate.getTime() - 30 * 24 * 60 * 60 * 1000);
-  return toYYYYMMDD(thirtyDaysAgo.toLocaleDateString());
-}
+const endDate = formatDate(endDateObj);
+const startDate = formatDate(startDateObj);
 
-let date = new Date().toLocaleDateString();
-
-const date30 = getDate30DaysAgoFromDateString(date);
-console.log(date30)
-date = toYYYYMMDD(date)
 
 export const getMap = function (
   ref: React.RefObject<HTMLDivElement>,

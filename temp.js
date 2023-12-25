@@ -7,14 +7,14 @@ const NASA_API_PARAMS = [
     'PS',           // Surface Pressure (kPa)
     'WS2M',         // Wind Speed at 2 Meters (m/s)
     'WS10M',        // Wind Speed at 10 Meters (m/s)
-    // 'PEVAP',        // Evapotranspiration
     'PRECTOTCORR',  // Precipitation Corrected (mm/day)
     'QV2M',         // Specific Humidity at 2 Meters (g/kg)
-    // 'Streamflow',   // Streamflow 
     'TS',           // Earth Skin Temperature (Degrees Celculs)
     'GWETTOP',      // Surface Soil Wetness (Unit: 1)   [Surface to 10cm]
     'GWETROOT',     // Root Zone Soil Wetness (Unit: 1) [Surface to 100cm]
     'GWETPROF',     // Profile Soil Moisture (Units: 1) [Surface to Bedrock]
+    // 'PEVAP',        // Evapotranspiration
+    // 'Streamflow',   // Streamflow 
   ].join(',');
 
   
@@ -24,9 +24,19 @@ const NASA_API_ENDPOINT = 'https://power.larc.nasa.gov/api/temporal/daily/point'
 
 const temp = 'parameters=GWETPROF,TS,PS,WS2M,PRECTOTCORR,T2M,QV2M,GWETROOT,GWETTOP&community=AG&longitude=-97.7263&latitude=30.3470&start=20210101&end=20210331&format=JSON'
 
-const currentDate = new Date();
-const endDate = new Date(currentDate.getTime() - 2 * 24 * 60 * 60 * 1000); // Current date - 2 days
-const startDate = new Date(endDate.getTime() - 30 * 24 * 60 * 60 * 1000); // End date - 30 days
+const currentDateObj = new Date();
+const endDateObj = new Date(currentDateObj.getTime() - 2 * 24 * 60 * 60 * 1000); // Current date - 2 days
+const startDateObj = new Date(endDateObj.getTime() - 30 * 24 * 60 * 60 * 1000); // End date - 30 days
+
+const formatDate = (dateObj) => {
+  const year = dateObj.getFullYear();
+  const month = (dateObj.getMonth() + 1).toString().padStart(2, '0'); // Adding 1 to get the correct month (as months start from 0)
+  const day = dateObj.getDate().toString().padStart(2, '0');
+  return `${year}${month}${day}`;
+};
+
+const endDate = formatDate(endDateObj);
+const startDate = formatDate(startDateObj);
 
 
 const predict = function (r, d) {
