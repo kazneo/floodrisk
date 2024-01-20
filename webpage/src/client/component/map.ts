@@ -42,7 +42,7 @@ export const getMap = function (
     zoom: zoom,
   });
 
-  import('../assets/gz_2010_us_040_00_5m.json').then((USState: any) => {
+  import('../../assets/gz_2010_us_040_00_5m.json').then((USState: any) => {
     map.addSource('us-states', {
       type: 'geojson',
       data: USState,
@@ -61,7 +61,7 @@ export const getMap = function (
     });
   });
 
-  import('../assets/risk.json').then((InfraLocation: any) => {
+  import('../../assets/risk.json').then((InfraLocation: any) => {
     map.addSource('infra-location', {
       type: 'geojson',
       data: InfraLocation,
