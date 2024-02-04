@@ -1,5 +1,7 @@
-const { application } = require('express');
+// const { application } = require('express');
 const express = require('express');
+const axios = require('axios');
+
 const app = express();
 const port = 3000;
 
@@ -22,39 +24,51 @@ const NASA_API_PARAMS = [
 
 const NASA_API_COMMUNITY = 'AG';
 const NASA_API_ENDPOINT = 'https://power.larc.nasa.gov/api/temporal/daily/point';
-app.get('/nasaData', (req, res) => {
-    fetch(`${NASA_API_ENDPOINT}?parameters&community=${NASA_API_COMMUNITY}&longitude=${req.longitude}&latitude=${req.latitude}&=${NASA_API_PARAMS}&start=${req.startDate}&end${req.endDate}&format=JSON`)
-    .then(response => response.json())
-    .then(data => {
-        console.log(data);
-        res.send(data);
-        console.log("done");
-    })
-    .catch(error => {
+
+const currentDateObj = new Date();
+const endDateObj = new Date(currentDateObj.getTime() - 2 * 24 * 60 * 60 * 1000); // Current date - 2 days
+const startDateObj = new Date(endDateObj.getTime() - 30 * 24 * 60 * 60 * 1000); // End date - 30 days
+
+const formatDate = (dateObj) => {
+  const year = dateObj.getFullYear();
+  const month = (dateObj.getMonth() + 1).toString().padStart(2, '0'); // Adding 1 to get the correct month (as months start from 0)
+  const day = dateObj.getDate().toString().padStart(2, '0');
+  return `${year}${month}${day}`;
+};
+
+const endDate = formatDate(endDateObj);
+const startDate = formatDate(startDateObj);
+app.get('/nasaData', async (req, res) => {
+    try {
+        const response = await axios.get(`${NASA_API_ENDPOINT}?parameters=${NASA_API_PARAMS}&community=${NASA_API_COMMUNITY}&longitude=${req.query.longitude}&latitude=${req.query.latitude}&start=${startDate}&end=${endDate}&format=JSON`);
+        res.json(response.data);
+      } catch (error) {
         console.error(error);
-        res.status(500).send(error);
-    })
+        res.status(500).json({ error: 'Internal Server Error' });
+      }
 });
 
 app.get('/riskIndex', (req, res) => {
-    try{
+    try {
         const pythonProcess = spawn('python', ['model.py', '1.0', '2.0', '3.0', '4.0']);
-        // Collect the output
         let output = '';
         pythonProcess.stdout.on('data', (data) => {
-           output += data.toString();
+            output += data.toString();
         });
-        
-        // Send the response
+      
         pythonProcess.stdout.on('end', () => {
-            res.send(`Prediction: ${output}`);
+            res.send(output);
         });
-        console.log('done')
-    } catch {
-        console.error(error)
-        res.status(500).send(error);
+  
+        pythonProcess.on('error', (error) => {
+            console.error(error);
+            res.status(500).send(error.message);
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).send(error.message);
     }
-})
+});
 
 app.listen(port, () => {
 	console.log('Listening on localhost:3000');

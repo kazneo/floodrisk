@@ -1,35 +1,10 @@
-import React from 'react';
-import axios from 'axios';
+import React from 'react'
 import mapboxgl from 'mapbox-gl';
 
 mapboxgl.accessToken = 'pk.eyJ1Ijoia2F6bmVvIiwiYSI6ImNsZ2Q0NWYyZDA5dzUzbHBqbnU2cjZlNGMifQ.5NJfdTyPHDpp5WwL1DeHmw';
 
 const center: [number, number] = [-91.318359, 30.690782];
 const zoom = 4.5;
-
-async function getData(lat: string, lon: string, startDate: string, endDate: string) {
-  try {
-      const url = 'https://power.larc.nasa.gov/api/temporal/daily/point?parameters=PRECTOT&community=RE&longitude='+lat+'&latitude='+lon+'&start={'+ startDate +'}&end='+ endDate + '&format=JSON'
-      const response = await axios.get(url);
-      console.log(response)
-  } catch (error) {
-      console.error('Error fetching data:', error);
-  }
-}
-const currentDateObj = new Date();
-const endDateObj = new Date(currentDateObj.getTime() - 2 * 24 * 60 * 60 * 1000); // Current date - 2 days
-const startDateObj = new Date(endDateObj.getTime() - 30 * 24 * 60 * 60 * 1000); // End date - 30 days
-
-const formatDate = (dateObj) => {
-  const year = dateObj.getFullYear();
-  const month = (dateObj.getMonth() + 1).toString().padStart(2, '0'); // Adding 1 to get the correct month (as months start from 0)
-  const day = dateObj.getDate().toString().padStart(2, '0');
-  return `${year}${month}${day}`;
-};
-
-const endDate = formatDate(endDateObj);
-const startDate = formatDate(startDateObj);
-
 
 export const getMap = function (
   ref: React.RefObject<HTMLDivElement>,
@@ -61,7 +36,7 @@ export const getMap = function (
     });
   });
 
-  import('../../assets/risk.json').then((InfraLocation: any) => {
+  import('../../../../floodedFrac.json').then((InfraLocation: any) => {
     map.addSource('infra-location', {
       type: 'geojson',
       data: InfraLocation,
@@ -76,10 +51,10 @@ export const getMap = function (
         'circle-color': [
           'interpolate',
           ['linear'],
-          ['get', 'risk_analysis'],
+          ['get', 'floodedFrac'],
           0, '#00FF00',
-          21.39780032311679, '#FFAA00',
-          60.204575017875776, '#FF0000',
+          0.5, '#FFAA00',
+          1, '#FF0000',
         ],
         'circle-radius': 3,
         'circle-stroke-width': 1,
@@ -93,10 +68,10 @@ export const getMap = function (
         const properties = feature.properties as { [key: string]: any };
 
         const clickedLocation = {
-          name: properties.name,
-          city: properties.city,
-          state: properties.state,
-          risk_analysis: properties.risk_analysis,
+          name: properties.NAME,
+          city: properties.CITY,
+          state: properties.STATE,
+          risk_analysis: properties.floodedFrac,
         };
 
         // Change appearance of clicked location
