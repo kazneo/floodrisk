@@ -36,7 +36,7 @@ export const getMap = function (
     });
   });
 
-  import('../../../../floodedFrac.json').then((InfraLocation: any) => {
+  import('../../assets/floodedFrac.json').then((InfraLocation: any) => {
     map.addSource('infra-location', {
       type: 'geojson',
       data: InfraLocation,
