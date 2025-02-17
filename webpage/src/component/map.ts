@@ -1,10 +1,11 @@
 import React from 'react'
 import mapboxgl from 'mapbox-gl';
+// import mapbot_key from '../../.env';
 
 mapboxgl.accessToken = 'pk.eyJ1Ijoia2F6bmVvIiwiYSI6ImNsZ2Q0NWYyZDA5dzUzbHBqbnU2cjZlNGMifQ.5NJfdTyPHDpp5WwL1DeHmw';
 
 const center: [number, number] = [-91.318359, 30.690782];
-const zoom = 4.5;
+const zoom = 4.0;
 
 export const getMap = function (
   ref: React.RefObject<HTMLDivElement>,

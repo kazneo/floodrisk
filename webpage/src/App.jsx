@@ -9,6 +9,7 @@ import Main from './component/Main'
 // import Map from './component/Map'
 import { MapBoxWrapper } from './component/mapWrapper'
 import './App.css'
+// import './test.css'
 
 
 
